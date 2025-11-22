@@ -1,0 +1,157 @@
+[project]
+name = "vlm"
+authors = [
+  { name="biocommons contributors", email="biocommons-dev@googlegroups.com" },
+]
+description = "Off-the-shelf solution for adding local aggregate-level variant information to a VLM network"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "fastapi>=0.95.0",
+    "python-multipart",  # required for fastapi file uploads
+    "uvicorn",
+    "python-dotenv",
+    "anyio",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "httpx",
+    "jsonschema",
+    "pyyaml",
+]
+dev = [
+    "ruff==0.12.8",
+    "pre-commit>=4.2.0",
+    "ipykernel",
+]
+
+[project.urls]
+Homepage = "https://github.com/genomicmedlab/vlm_in_a_box"
+Documentation = "https://github.com/genomicmedlab/vlm_in_a_box/"
+Changelog = "https://github.com/genomicmedlab/vlm_in_a_box/releases"
+Source = "https://github.com/genomicmedlab/vlm_in_a_box/"
+"Bug Tracker" = "https://github.com/genomicmedlab/vlm_in_a_box/issues"
+
+
+[build-system]
+requires = [
+    "setuptools >= 65.3",
+    "setuptools_scm >= 8"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[tool.pytest.ini_options]
+addopts = "--cov=anyvar --cov-report term-missing"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["biocommons.example"]
+omit = ["*_test.py", "*/test/*", "*/tests/*"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+src = ["src"]
+include = ["src/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    # not used
+    "AIR",
+    "ERA",
+    "FAST",
+    "YTT",
+    "FBT",
+    "CPY",
+    "DJ",
+    "EM",
+    "EXE",
+    "FIX",
+    "FA",
+    "INT",
+    "PYI",
+    "TID",
+    "TD",
+    "TC",
+    "C90",
+    "NPY",
+    "PD",
+    # ignore for compatibility with formatter
+    "D206",
+    "D300",
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "E501",
+    "W191",
+    "S321",
+    "COM812",
+    # don't require types on *args, **kwargs
+    "ANN002",
+    "ANN003",
+    # subjective pylint thresholds
+    "PLR0904",
+    "PLR091",
+    "PLR1702",
+    # excessive docstring requirements
+    "D105",
+    "D205",
+    "D203",
+    "D213",  # conflicts with D212
+    "D400",
+    "D401",
+    "D403",
+    "D415",
+    # excessive exception message requirements
+    "TRY003",
+    # excessive type ignore requirements
+    "PGH003",
+    # misc unnecessary readability requirements
+    "RET504",
+]
+
+[tool.ruff.lint.flake8-unused-arguments]
+ignore-variadic-names = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "E402"]
+"tests/*" = ["ANN001", "ANN2", "ANN102", "S101", "B011", "INP001", "D", "C400", "PLR2004"]
+
+[tool.ruff.format]
+docstring-code-format = true
